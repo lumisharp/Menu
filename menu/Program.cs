@@ -6,7 +6,6 @@ Action[] actions =
             AddSudent,
             AddGrade,
             PrintStudentGrades,
-           SortedStudent,
            PrintSortedStudent
        ];
 
@@ -14,30 +13,33 @@ while (true)
 {
     Console.WriteLine("""
                 Меню:
-                0. Добавить студента
-                1. Добавить оценку
-                2. Вывести оценки студента
-                3. Отсортировать студентов
-                4. Вывести отсортированный список студентов
+                а. Добавить студента
+                б. Добавить оценку
+                в. Вывести оценки студента
+                г. Вывести отсортированный список студентов
                 Выберите опцию:
                 """);
 
-    actions[int.Parse(Console.ReadLine())]();
-    /*for (int i = 0; i < actions.Length; i++)
-        if (int.Parse(Console.ReadLine()) == i)
-        {
-            actions[i]();
-            break;
-        }*/
+   char choice = Console.ReadKey().KeyChar;
+
+    int index = choice - 'а';
+    if (index>= 0 && index < actions.Length)
+    {
+        actions[index]();
+    }
+    else
+    {
+        Console.WriteLine("Неверный выбор");
+    }
 }
-void AddSudent()
+static void AddSudent()
 {
     Console.WriteLine("Введите имя студента");
-    students.Add(new(Console.ReadLine()));
+    students.Add(new Student(Console.ReadLine()));
     Console.WriteLine("Студент добавлен.");
 }
 
-void AddGrade()
+static void AddGrade()
 {
     Console.Write("Введите имя студента: ");
     foreach (var student in students)
@@ -55,7 +57,7 @@ void AddGrade()
     Console.WriteLine("Студент не найден.");
 }
 
-void PrintStudentGrades()
+static void PrintStudentGrades()
 {
     Console.Write("Введите имя студента: ");
     foreach (var student in students)
@@ -69,7 +71,7 @@ void PrintStudentGrades()
 
     Console.WriteLine("Студент не найден.");
 }
-void SortedStudent()
+static void SortedStudent()
 {
     List<Student> sortedStudents = new(students);
     for (int i = 0; i < sortedStudents.Count - 1; i++)
@@ -82,7 +84,17 @@ void SortedStudent()
         }
 }
 
-void PrintSortedStudent()
+static void PrintSortedStudent()
+{
+    SortedStudent();
+    Console.WriteLine("Список студентов, отсортированный по среднему баллу:");
+    foreach (var student in students)
+    {
+        Console.WriteLine($"{student.Name}: {AverageGrade(student):F2}");
+    }
+}
+
+static void PrintStudent(List<Student> students )
 {
     Console.WriteLine("Список студентов, отсортированный по среднему баллу:");
     foreach (var student in students)
@@ -91,7 +103,7 @@ void PrintSortedStudent()
     }
 }
 
-double AverageGrade(Student student)
+static double AverageGrade(Student student)
 {
 
     if (student.Grades.Count == 0)
